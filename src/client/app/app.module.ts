@@ -5,18 +5,17 @@ import {AppComponent} from './app.component';
 import {ProjectsListComponent} from './components/project/projects-list.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TaskComponent} from './components/task/task.component';
-import {DoneTasksPipe} from './pipes/done-tasks.pipe';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ProjectDetailComponent} from './components/project/project-detail.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { NewProjectComponent } from './components/project/new-project.component';
+import {NewProjectComponent} from './components/project/new-project.component';
+import {TimeagoModule} from 'ngx-timeago';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProjectsListComponent,
     TaskComponent,
-    DoneTasksPipe,
     ProjectDetailComponent,
     NewProjectComponent,
   ],
@@ -26,6 +25,7 @@ import { NewProjectComponent } from './components/project/new-project.component'
     NgbModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    TimeagoModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

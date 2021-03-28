@@ -5,6 +5,7 @@ import {ProjectsMockService} from '../../services/projects-mock.service';
 import {Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {FormControl, Validators} from '@angular/forms';
+import {Task} from '../../models/task';
 
 @Component({
   selector: 'app-project-detail',
@@ -24,7 +25,7 @@ import {FormControl, Validators} from '@angular/forms';
           <button class="btn btn-sm" *ngIf="editing" (click)="closeEditing()">
             <fa-icon [icon]="iconClose"></fa-icon>
           </button>
-          <button class="btn btn-sm"  *ngIf="editing && form.valid" (click)="editProject()">
+          <button class="btn btn-sm" *ngIf="editing && form.valid" (click)="editProject()">
             <fa-icon [icon]="iconSave"></fa-icon>
           </button>
           <button class="btn btn-sm" *ngIf="!editing" (click)="deleteProject()">
@@ -34,14 +35,14 @@ import {FormControl, Validators} from '@angular/forms';
       </div>
       <div class="card-header">To Do:</div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let task of project.tasks | doneTasks:false">
-          <app-task [task]="task"></app-task>
+        <li class="list-group-item" *ngFor="let task of tasks.notDone; let i = index">
+          <app-task [task]="task" (markedAsDone)="markedAsDone($event, i)" (delete)="deleteTask($event, i)"></app-task>
         </li>
       </ul>
       <div class="card-header">Done:</div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item" *ngFor="let task of project.tasks | doneTasks">
-          <app-task [task]="task"></app-task>
+        <li class="list-group-item" *ngFor="let task of tasks.done; let i = index">
+          <app-task [task]="task" (markedAsNotDone)="markedAsNotDone($event, i)"></app-task>
         </li>
       </ul>
     </div>
@@ -59,12 +60,14 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   editing = false;
   private subscription = new Subscription();
   form: FormControl;
+  tasks: {notDone: Task[], done: Task[]};
 
   constructor(private projectsService: ProjectsMockService) {
   }
 
   ngOnInit(): void {
     this.form = new FormControl(this.project.name, Validators.required);
+    this.prepareTasks();
   }
 
   ngOnDestroy(): void {
@@ -96,5 +99,32 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   closeEditing(): void {
     this.editing = false;
     this.form.setValue(this.project.name);
+  }
+
+  markedAsDone(task: Task, index: number): void {
+    this.tasks.notDone.splice(index, 1);
+    this.tasks.done.push(task);
+  }
+
+  markedAsNotDone(task: Task, index: number): void {
+    this.tasks.done.splice(index, 1);
+    this.tasks.notDone.push(task);
+  }
+
+  private prepareTasks(): void {
+    this.tasks = {done: [], notDone: []};
+    this.project.tasks.reduce((tasks, task) => {
+      if (task.finishedAt) {
+        tasks.done.push(task);
+        return tasks;
+      }
+
+      tasks.notDone.push(task);
+      return tasks;
+    }, this.tasks);
+  }
+
+  deleteTask(task: Task, i: number): void {
+    this.tasks.notDone.splice(i, 1);
   }
 }
