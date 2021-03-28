@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+  `,
+  styles: [],
 })
 export class AppComponent {
   title = 'EDirectInsure-TODO-List';
