@@ -10,7 +10,7 @@ import {Task} from '../../models/task';
 @Component({
   selector: 'app-project-detail',
   template: `
-    <div class="card">
+    <div class="card project">
       <div class="card-header alert-info">
         <span class="float-left" *ngIf="!editing">
           {{ project.name }}
@@ -50,7 +50,7 @@ import {Task} from '../../models/task';
       </div>
     </div>
   `,
-  styles: [],
+  styles: ['.project {margin-top: 20px; margin-bottom: 20px;}'],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   @Input() project: Project;
