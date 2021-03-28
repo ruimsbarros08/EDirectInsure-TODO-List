@@ -10,6 +10,7 @@ import {ProjectDetailComponent} from './components/project/project-detail.compon
 import {ReactiveFormsModule} from '@angular/forms';
 import {NewProjectComponent} from './components/project/new-project.component';
 import {TimeagoModule} from 'ngx-timeago';
+import { NewTaskComponent } from './components/task/new-task.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {TimeagoModule} from 'ngx-timeago';
     TaskComponent,
     ProjectDetailComponent,
     NewProjectComponent,
+    NewTaskComponent,
   ],
   imports: [
     BrowserModule,

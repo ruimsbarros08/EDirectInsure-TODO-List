@@ -1,9 +1,9 @@
 import {Project} from './project';
 
 export class Task {
-  id: string;
+  id?: string;
   description: string;
-  createdAt: Date;
+  createdAt?: Date;
   finishedAt?: Date;
   project?: Project;
 }

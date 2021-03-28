@@ -45,6 +45,9 @@ import {Task} from '../../models/task';
           <app-task [task]="task" (markedAsNotDone)="markedAsNotDone($event, i)"></app-task>
         </li>
       </ul>
+      <div class="card-body">
+        <app-new-task (create)="createTask($event)"></app-new-task>
+      </div>
     </div>
   `,
   styles: [],
@@ -60,7 +63,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   editing = false;
   private subscription = new Subscription();
   form: FormControl;
-  tasks: {notDone: Task[], done: Task[]};
+  tasks: { notDone: Task[], done: Task[] };
 
   constructor(private projectsService: ProjectsMockService) {
   }
@@ -126,5 +129,9 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   deleteTask(task: Task, i: number): void {
     this.tasks.notDone.splice(i, 1);
+  }
+
+  createTask(task: Task): void {
+    this.tasks.notDone.push(task);
   }
 }
