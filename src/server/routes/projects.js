@@ -1,19 +1,20 @@
 const express = require("express");
-const projectService = require("./services/project");
-const taskService = require("./services/task");
+const projectService = require("../services/project");
+const taskService = require("../services/task");
+const projectAuthorization = require("../middleware/projectAuthorization");
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const projects = await projectService.findAll();
+  const projects = await projectService.findAll(req.user._id);
   res.send(projects);
 });
 
 router.post('/', async (req, res) => {
-  res.send(await projectService.create(req.body.name));
+  res.send(await projectService.create(req.body.name, req.user._id));
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", projectAuthorization, async (req, res) => {
   try {
     const project = await projectService.findOne(req.params.id);
     res.send(project);
@@ -23,7 +24,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", projectAuthorization, async (req, res) => {
   try {
     const project = await projectService.findOne(req.params.id);
 
@@ -38,7 +39,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", projectAuthorization, async (req, res) => {
   try {
     await projectService.deleteOne(req.params.id);
     res.status(204).send();
@@ -48,7 +49,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post('/:project_id/tasks', async (req, res) => {
+router.post('/:project_id/tasks', projectAuthorization, async (req, res) => {
   try {
     const project = await projectService.findOne(req.params.project_id);
     res.send(await taskService.create(project, req.body.description));
@@ -58,7 +59,7 @@ router.post('/:project_id/tasks', async (req, res) => {
   }
 });
 
-router.put("/:project_id/tasks/:id", async (req, res) => {
+router.put("/:project_id/tasks/:id", projectAuthorization, async (req, res) => {
   try {
     res.send(await taskService.findOneAndUpdate(req.params.project_id, req.params.id, req.body.description, req.body.createdAt, req.body.finishedAt));
   } catch {
@@ -67,7 +68,7 @@ router.put("/:project_id/tasks/:id", async (req, res) => {
   }
 });
 
-router.delete("/:project_id/tasks/:id", async (req, res) => {
+router.delete("/:project_id/tasks/:id", projectAuthorization, async (req, res) => {
   try {
     await taskService.deleteOne(req.params.project_id, req.params.id);
     res.status(204).send();
