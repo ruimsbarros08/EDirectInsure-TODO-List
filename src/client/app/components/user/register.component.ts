@@ -27,6 +27,9 @@ import {tap} from 'rxjs/operators';
             <button type="submit" class="btn btn-primary" (click)="register()" [disabled]="form.invalid">Register</button>
           </form>
         </div>
+        <div class="offset-md-3 col-12">
+          <button class="btn"><a routerLink="/login">Or login</a></button>
+        </div>
       </div>
     </form>
   `,

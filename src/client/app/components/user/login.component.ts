@@ -23,6 +23,9 @@ import {Subscription} from 'rxjs';
             <button type="submit" class="btn btn-primary" (click)="login()" [disabled]="form.invalid">Login</button>
           </form>
         </div>
+        <div class="offset-md-3 col-12">
+          <button class="btn"><a routerLink="/register">Or register</a></button>
+        </div>
       </div>
     </form>
   `,
