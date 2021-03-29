@@ -1,12 +1,24 @@
-
 const Task = require("../models/task");
+const Project = require("../models/project");
 
 module.exports = {
-  findOne: async (id) => Task.findOne({_id: id}),
-  update: async (task, newDescription, newFinishedAt) => {
-    task.description = newDescription;
-    task.newFinishedAt = newFinishedAt;
-    task.save();
+  findOneAndUpdate: async (projectId, id, description, createdAt, finishedAt) => {
+    return new Promise(((resolve, reject) => {
+      Project.findById(projectId, async (err, doc) => {
+        if (err) {
+          reject(err);
+        }
+
+        const task = doc.tasks.id(id);
+
+        task.description = description;
+        task.createdAt = createdAt;
+        task.finishedAt = finishedAt;
+
+        await doc.save();
+        resolve(task);
+      });
+    }));
   },
   create: async (project, description) => {
     const task = new Task({
@@ -20,5 +32,17 @@ module.exports = {
 
     return task;
   },
-  deleteOne: async (id) => Task.deleteOne({ _id: id }),
+  deleteOne: async (projectId, id) => {
+    return new Promise(((resolve, reject) => {
+      Project.findOneAndUpdate({'tasks._id': id}, {
+        $pull: {tasks: {_id: id}}
+      }, {new: true}, (err, doc) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(doc);
+      });
+    }));
+  },
 }

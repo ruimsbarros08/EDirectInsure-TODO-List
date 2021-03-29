@@ -38,7 +38,7 @@ import {TasksService} from '../../services/tasks.service';
     </span>
     <span *ngIf="task.finishedAt">
       <div class="float-left">
-        <del ngbTooltip="Done {{ task.finishedAt.toISOString() | timeago }}">{{ task.description }}</del>
+        <del ngbTooltip="Done at {{ task.finishedAt | date }}">{{ task.description }}</del>
       </div>
       <div class="float-right">
         <button type="button" class="btn btn-sm" (click)="markAsNotDone()"><fa-icon [icon]="iconNotDone"></fa-icon></button>
