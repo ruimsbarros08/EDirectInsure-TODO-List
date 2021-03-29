@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "start:api": "node src/server/app.js"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@ng-bootstrap/ng-bootstrap": "^9.1.0",
     "bootstrap": "^4.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.2",
     "ngx-timeago": "^2.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

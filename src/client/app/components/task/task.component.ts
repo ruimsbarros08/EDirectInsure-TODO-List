@@ -1,10 +1,11 @@
 import {Component, Input, OnDestroy, OnInit, Output, EventEmitter} from '@angular/core';
 import {Task} from '../../models/task';
 import {faTrash, faEdit, faCheck, faRedo, faSave, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {TasksMockService} from '../../services/tasks-mock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import {Project} from '../../models/project';
+import {TasksService} from '../../services/tasks.service';
 
 @Component({
   selector: 'app-task',
@@ -47,6 +48,7 @@ import {tap} from 'rxjs/operators';
   styles: [],
 })
 export class TaskComponent implements OnInit, OnDestroy {
+  @Input() project: Project;
   @Input() task: Task;
   @Output() markedAsDone = new EventEmitter<Task>();
   @Output() markedAsNotDone = new EventEmitter<Task>();
@@ -62,7 +64,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
   editing = false;
 
-  constructor(private tasksService: TasksMockService) {
+  constructor(private tasksService: TasksService) {
   }
 
   ngOnInit(): void {
@@ -78,7 +80,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   markAsDone(): void {
     const t: Task = {
-      id: this.task.id,
+      _id: this.task._id,
       description: this.task.description,
       createdAt: this.task.createdAt,
       finishedAt: new Date(),
@@ -92,7 +94,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   markAsNotDone(): void {
     const t: Task = {
-      id: this.task.id,
+      _id: this.task._id,
       description: this.task.description,
       createdAt: this.task.createdAt,
       finishedAt: null,
@@ -111,7 +113,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   editTaskDescription(): void {
     const t: Task = {
-      id: this.task.id,
+      _id: this.task._id,
       description: this.form.get('description').value,
       createdAt: this.task.createdAt,
       finishedAt: this.task.finishedAt,
@@ -124,7 +126,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   private updateTask(t: Task): Observable<Task> {
-    return this.tasksService.update(t).pipe(
+    return this.tasksService.update(this.project, t).pipe(
       tap(task => this.task = task),
       tap(task => {
         this.form.get('description').setValue(task.description);
@@ -134,7 +136,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   deleteTask(): void {
-    const sub = this.tasksService.delete(this.task).pipe(
+    const sub = this.tasksService.delete(this.project, this.task).pipe(
       tap(task => this.delete.emit(task)),
     ).subscribe();
     this.subscription.add(sub);

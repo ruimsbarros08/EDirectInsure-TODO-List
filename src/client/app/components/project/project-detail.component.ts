@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit, Output, EventEmitter} from '@angular/core';
 import {Project} from '../../models/project';
 import {faTrash, faEdit, faSave, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {ProjectsMockService} from '../../services/projects-mock.service';
 import {Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {FormControl, Validators} from '@angular/forms';
 import {Task} from '../../models/task';
+import {ProjectsService} from '../../services/projects.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -36,17 +36,17 @@ import {Task} from '../../models/task';
       <div class="card-header">To Do:</div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let task of tasks.notDone; let i = index">
-          <app-task [task]="task" (markedAsDone)="markedAsDone($event, i)" (delete)="deleteTask($event, i)"></app-task>
+          <app-task [project]="project" [task]="task" (markedAsDone)="markedAsDone($event, i)" (delete)="deleteTask($event, i)"></app-task>
         </li>
       </ul>
       <div class="card-header">Done:</div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let task of tasks.done; let i = index">
-          <app-task [task]="task" (markedAsNotDone)="markedAsNotDone($event, i)"></app-task>
+          <app-task [project]="project" [task]="task" (markedAsNotDone)="markedAsNotDone($event, i)"></app-task>
         </li>
       </ul>
       <div class="card-body">
-        <app-new-task (create)="createTask($event)"></app-new-task>
+        <app-new-task [project]="project" (create)="createTask($event)"></app-new-task>
       </div>
     </div>
   `,
@@ -65,7 +65,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   form: FormControl;
   tasks: { notDone: Task[], done: Task[] };
 
-  constructor(private projectsService: ProjectsMockService) {
+  constructor(private projectsService: ProjectsService) {
   }
 
   ngOnInit(): void {
@@ -86,7 +86,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   editProject(): void {
     const p: Project = {
-      id: this.project.id,
+      _id: this.project._id,
       name: this.form.value,
       tasks: this.project.tasks,
     };

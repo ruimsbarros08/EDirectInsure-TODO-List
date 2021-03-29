@@ -1,0 +1,29 @@
+version: "3"
+services:
+  database:
+    container_name: todo-db
+    image: mongo:4.4.4
+    volumes:
+      - ./data:/data/db
+  api:
+    depends_on:
+      - database
+    container_name: todo-api
+    image: node:14-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: npm run start:api
+  app:
+    depends_on:
+      - api
+    container_name: todo-app
+    image: node:14-alpine
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: node_modules/@angular/cli/bin/ng serve --host 0.0.0.0 --disable-host-check --poll 1

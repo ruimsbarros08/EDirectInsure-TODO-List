@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProjectsMockService} from '../../services/projects-mock.service';
 import {Project} from '../../models/project';
 import {tap} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
+import {ProjectsService} from '../../services/projects.service';
 
 @Component({
   selector: 'app-projects-list',
@@ -22,7 +22,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
   projects: Project[];
   private subscription = new Subscription();
 
-  constructor(private projectsService: ProjectsMockService) {
+  constructor(private projectsService: ProjectsService) {
   }
 
   ngOnInit(): void {

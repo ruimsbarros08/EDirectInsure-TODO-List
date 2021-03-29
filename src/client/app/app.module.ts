@@ -10,9 +10,11 @@ import {ProjectDetailComponent} from './components/project/project-detail.compon
 import {ReactiveFormsModule} from '@angular/forms';
 import {NewProjectComponent} from './components/project/new-project.component';
 import {TimeagoModule} from 'ngx-timeago';
-import { NewTaskComponent } from './components/task/new-task.component';
-import { LoginComponent } from './components/user/login.component';
-import { RegisterComponent } from './components/user/register.component';
+import {NewTaskComponent} from './components/task/new-task.component';
+import {LoginComponent} from './components/user/login.component';
+import {RegisterComponent} from './components/user/register.component';
+import {HttpClientModule} from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { RegisterComponent } from './components/user/register.component';
     NgbModule,
     FontAwesomeModule,
     ReactiveFormsModule,
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

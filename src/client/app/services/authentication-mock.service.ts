@@ -43,7 +43,7 @@ export class AuthenticationMockService {
 
   getUser(): User {
     return {
-      id: 'asdfghjkl',
+      _id: 'asdfghjkl',
       email: 'test@test.com',
       name: 'Test User',
     };

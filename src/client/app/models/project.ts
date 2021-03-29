@@ -1,7 +1,7 @@
 import { Task } from './task';
 
 export class Project {
-  id?: string;
+  _id?: string;
   name: string;
   tasks: Task[];
 }

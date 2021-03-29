@@ -1,9 +1,10 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {Task} from '../../models/task';
-import {TasksMockService} from '../../services/tasks-mock.service';
 import {tap} from 'rxjs/operators';
+import {Project} from '../../models/project';
+import {TasksService} from '../../services/tasks.service';
 
 @Component({
   selector: 'app-new-task',
@@ -18,11 +19,12 @@ import {tap} from 'rxjs/operators';
   styles: [],
 })
 export class NewTaskComponent implements OnInit, OnDestroy {
+  @Input() project: Project;
   @Output() create = new EventEmitter<Task>();
   form: FormControl;
   private subscription = new Subscription();
 
-  constructor(private tasksService: TasksMockService) {
+  constructor(private tasksService: TasksService) {
   }
 
   ngOnInit(): void {
@@ -38,7 +40,7 @@ export class NewTaskComponent implements OnInit, OnDestroy {
       description: this.form.value,
     };
 
-    const sub = this.tasksService.save(t).pipe(
+    const sub = this.tasksService.save(this.project, t).pipe(
       tap(task => this.create.emit(task)),
       tap(() => this.form.setValue('')),
     ).subscribe();

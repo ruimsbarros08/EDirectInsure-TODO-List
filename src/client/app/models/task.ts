@@ -1,9 +1,6 @@
-import {Project} from './project';
-
 export class Task {
-  id?: string;
+  _id?: string;
   description: string;
   createdAt?: Date;
   finishedAt?: Date;
-  project?: Project;
 }

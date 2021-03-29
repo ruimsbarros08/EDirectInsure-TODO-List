@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {ProjectsMockService} from '../../services/projects-mock.service';
 import {Subscription} from 'rxjs';
 import {Project} from '../../models/project';
 import {tap} from 'rxjs/operators';
+import {ProjectsService} from '../../services/projects.service';
 
 @Component({
   selector: 'app-new-project',
@@ -27,7 +27,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
   form: FormControl;
   private subscription = new Subscription();
 
-  constructor(private projectsService: ProjectsMockService) { }
+  constructor(private projectsService: ProjectsService) { }
 
   ngOnInit(): void {
     this.form = new FormControl('', Validators.required);
